@@ -33,7 +33,7 @@ class ProjectList(generics.ListCreateAPIView):
         return Project.objects.filter(owner=self.request.user)
 
 
-class ProjectDetailList(generics.RetrieveDestroyAPIView):
+class ProjectDetailList(generics.RetrieveUpdateDestroyAPIView):
     """
     Creates a view to list a specific project, specified by the given pk in the url, where you can also delete the project.
     """
