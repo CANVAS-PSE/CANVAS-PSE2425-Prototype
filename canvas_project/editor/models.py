@@ -46,7 +46,14 @@ class Heliostat(models.Model):
     aimpoint_y = models.FloatField(default=50)
     aimpoint_z = models.FloatField(default=0)
 
-    # How do we handle surface, kinematic and actuator config
+    # surface config
+    number_of_facets = models.IntegerField(default=4)
+    # Sollen die einzelnen Facetten konfigurierbar sein (Nein?)
+
+    # kinematic config
+    kinematic_type = models.CharField(max_length=300, default="ideal")
+
+    # actuator config -> anhand von kinematic type einfach festgelegt?
 
 
 class Receiver(models.Model):
