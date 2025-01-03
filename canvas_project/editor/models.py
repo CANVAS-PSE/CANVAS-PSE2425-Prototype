@@ -54,6 +54,8 @@ class Heliostat(models.Model):
     kinematic_type = models.CharField(max_length=300, default="ideal")
 
     # actuator config -> anhand von kinematic type einfach festgelegt?
+    def __str__(self) -> str:
+        return str(self.project) + " Heliostat " + str(self.pk)
 
 
 class Receiver(models.Model):
@@ -79,6 +81,9 @@ class Receiver(models.Model):
     resolution_e = models.IntegerField(default=256)
     resolution_u = models.IntegerField(default=256)
 
+    def __str__(self) -> str:
+        return str(self.project) + " Receiver " + str(self.pk)
+
 
 class Lightsource(models.Model):
     """
@@ -94,6 +99,9 @@ class Lightsource(models.Model):
     mean = models.FloatField(default=0)
     covariance = models.FloatField(default=4.3681e-06)
 
+    def __str__(self) -> str:
+        return str(self.project) + " Lightsource " + str(self.pk)
+
 
 class Settings(models.Model):
     """
@@ -104,6 +112,10 @@ class Settings(models.Model):
         Project, related_name="settings", on_delete=models.CASCADE
     )
     # Environment settings
+
     # Graphic settings
     shadows = models.BooleanField(default=True)
     fog = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return str(self.project) + " Settings"
