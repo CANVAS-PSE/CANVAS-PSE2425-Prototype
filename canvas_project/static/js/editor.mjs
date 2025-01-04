@@ -76,6 +76,22 @@ export class Editor {
     this.render();
   }
 
+  /**
+   * Enables or disables shadows
+   * @param {Boolean} mode True to enable, false to disable
+   */
+  setShadows(mode) {
+    this.renderer.shadowMap.enabled = mode;
+  }
+
+  /**
+   * Enables or disables the fog
+   * @param {Boolean} mode True to enable, false to disable
+   */
+  setFog(mode) {
+    this.scene.fog = mode ? new THREE.Fog(0xdde0e0, 100, 2200) : null;
+  }
+
   #setUpScene() {
     this.canvas = document.getElementById("canvas");
 
@@ -168,6 +184,7 @@ export class Editor {
     const heliostatList = projectJson["heliostats"];
     const receiverList = projectJson["receivers"];
     const lightsourceList = projectJson["lightsources"];
+    const settingsList = projectJson["settings"];
 
     heliostatList.forEach((heliostat) => {
       this.selectableGroup.add(
@@ -217,6 +234,10 @@ export class Editor {
     lightsourceList.forEach((lightsource) => {
       this.selectableGroup.add(new Lightsource(lightsource.id));
     });
+
+    // set the settings
+    this.setShadows(settingsList["shadows"]);
+    this.setFog(settingsList["fog"]);
 
     // only for debugging purposes --> will be removed
     console.log(this.scene);
