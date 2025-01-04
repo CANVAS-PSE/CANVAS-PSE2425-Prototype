@@ -69,7 +69,12 @@ class Receiver(models.Model):
     position_x = models.FloatField(default=0)
     position_y = models.FloatField(default=0)
     position_z = models.FloatField(default=0)
-    rotation = models.FloatField(default=0)
+
+    normal_x = models.FloatField(default=0)
+    normal_y = models.FloatField(default=1)
+    normal_z = models.FloatField(default=0)
+
+    rotation_y = models.FloatField(default=0)
 
     # optional fields
     curvature_e = models.FloatField(blank=True, null=True, default=None)

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Vector3 } from "three";
 import { Object3D } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
@@ -6,15 +7,20 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
  * Represents a Heliostat 3D model containing all the necassary parameters and functions for that.
  */
 export class Heliostat extends Object3D {
-  constructor() {
+  /**
+   * Creates a new Heliostat
+   * @param {Number} apiID Is the id for api requests
+   * @param {Vector3} position Is the position of the Heliostat
+   * @param {Vector3} aimPoint Is the point the heliostat is aiming at
+   * @param {Number} numberOfFacets Are the number of facets this heliostat has
+   * @param {String} kinematicType Is the type of kinemtic this heliostat has
+   */
+  constructor(apiID, position, aimPoint, numberOfFacets, kinematicType) {
     super();
     this.loader = new GLTFLoader();
     this.mesh;
     this.loader.load("/static/models/heliostat.glb", (gltf) => {
       this.mesh = gltf.scene;
-      this.mesh.scale.set(2, 2, 2);
-      this.lookAt(0, 0, 0);
-      this.rotateY(Math.PI / 2);
       this.mesh.traverse((child) => {
         if (child.isMesh) {
           child.castShadow = true;
@@ -22,6 +28,11 @@ export class Heliostat extends Object3D {
       });
       this.add(this.mesh);
     });
+    this.position.copy(position);
+    this.apiID = apiID;
+    this.aimPoint = aimPoint;
+    this.numberOfFacets = numberOfFacets;
+    this.kinematicType = kinematicType;
   }
 }
 
@@ -29,7 +40,31 @@ export class Heliostat extends Object3D {
  * Represents a Receiver 3D model containing all the necassary parameters and functions for that.
  */
 export class Receiver extends Object3D {
-  constructor() {
+  /**
+   * Creates a new receiver
+   * @param {Number} apiID Is the id for api requests
+   * @param {Vector3} position Is the position of the receiver
+   * @param {Vector3} normalVector The normal to the plane of the receiver
+   * @param {Number} rotationY Is the rotation of the receiver
+   * @param {Number} planeE The width of the receiver
+   * @param {Number} planeU The height of the receiver
+   * @param {Number} resolutionE The horizontal resolution of the receiver
+   * @param {Number} resolutionU The vertical resolution of the receiver
+   * @param {Number} [curvatureE] The curvature of the receiver in east direction
+   * @param {Number} [curvatureU] The curvature of the receiver in up direction
+   */
+  constructor(
+    apiID,
+    position,
+    normalVector,
+    rotationY,
+    curvatureE,
+    curvatureU,
+    planeE,
+    planeU,
+    resolutionE,
+    resolutionU
+  ) {
     super();
     this.loader = new GLTFLoader();
     this.mesh;
@@ -42,6 +77,16 @@ export class Receiver extends Object3D {
         }
       });
     });
+    this.position.copy(position);
+    this.rotateY(rotationY);
+    this.apiID = apiID;
+    this.normalVector = normalVector;
+    this.curvatureE = curvatureE;
+    this.curvatureU = curvatureU;
+    this.planeE = planeE;
+    this.planeU = planeU;
+    this.resolutionE = resolutionE;
+    this.resolutionU = resolutionU;
   }
 }
 
@@ -49,8 +94,30 @@ export class Receiver extends Object3D {
  * Represents a Lightsource 3D model containing all the necassary parameters and functions for that.
  */
 export class Lightsource extends Object3D {
-  constructor() {
+  /**
+   * Create a new lightsource
+   * @param {Number} apiID Is the id for api requests
+   * @param {Number} numberOfRays Is the number of sent-out rays sampled from the sun distribution
+   * @param {String} lightsourceType Is the type of the lightsource
+   * @param {String} distributionType Is the distribtion used to model the lightsource e.g. normal
+   * @param {Number} mean Parameter of the distribution
+   * @param {Number} covariance Parameter of the distribtution
+   */
+  constructor(
+    apiID,
+    numberOfRays,
+    lightsourceType,
+    distributionType,
+    mean,
+    covariance
+  ) {
     super();
+    this.apiID = apiID;
+    this.numberOfRays = numberOfRays;
+    this.lightsourceType = lightsourceType;
+    this.distributionType = distributionType;
+    this.mean = mean;
+    this.covariance = covariance;
   }
 }
 
@@ -68,7 +135,6 @@ export class Terrain extends Object3D {
     this.terrain.rotateX((3 * Math.PI) / 2);
     this.add(this.terrain);
 
-    // mountains/trees
     this.mountains = new THREE.Group();
     this.add(this.mountains);
     for (let i = 0; i < 100; i++) {

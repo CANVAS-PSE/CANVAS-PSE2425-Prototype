@@ -8,7 +8,6 @@ import { SaveAndLoadHandler } from "saveAndLoadHandler";
 import { Heliostat, Receiver, Lightsource, Terrain } from "objects";
 import { Object3D } from "three";
 import { Navbar } from "navbar";
-import { BoxHelper } from "three";
 
 let editorInstance = null;
 
@@ -43,7 +42,7 @@ export class Editor {
    */
   addObject(object) {
     // TODO: determine type and save object in db
-    this.scene.add(object);
+    this.selectableGroup.add(object);
   }
 
   /**
@@ -52,7 +51,7 @@ export class Editor {
    */
   deleteObject(object) {
     // TODO: determine type and delete object from db
-    this.scene.remove(object);
+    this.selectableGroup.remove(object);
   }
 
   animate() {
@@ -92,6 +91,7 @@ export class Editor {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     // since we render multiple times (scene and compass), we need to clear the renderer manually
     this.renderer.autoClear = false;
+    this.renderer.shadowMap.enabled = true;
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     this.canvas.appendChild(this.renderer.domElement);
 
@@ -136,7 +136,7 @@ export class Editor {
       "circles"
     );
 
-    this.selectionBox = new BoxHelper();
+    this.selectionBox = new THREE.BoxHelper();
     this.scene.add(this.selectionBox);
 
     // controls
@@ -156,11 +156,69 @@ export class Editor {
     this.transformControls.addEventListener("dragging-changed", (event) => {
       this.controls.enabled = !event.value;
     });
+
+    this.selectableGroup = new THREE.Group();
+    this.selectableGroup.name = "selectableGroup";
+    this.scene.add(this.selectableGroup);
   }
 
   async #loadProject() {
     const projectJson = await this.saveAndLoadHandler.getProjectData();
 
-    //TODO: Go through Json and place objects
+    const heliostatList = projectJson["heliostats"];
+    const receiverList = projectJson["receivers"];
+    const lightsourceList = projectJson["lightsources"];
+
+    heliostatList.forEach((heliostat) => {
+      this.selectableGroup.add(
+        new Heliostat(
+          heliostat.id,
+          new THREE.Vector3(
+            heliostat.position_x,
+            heliostat.position_y,
+            heliostat.position_z
+          ),
+          new THREE.Vector3(
+            heliostat.aimpoint_x,
+            heliostat.aimpoint_y,
+            heliostat.aimpoint_z
+          ),
+          heliostat.number_of_facets,
+          heliostat.kinematic_type
+        )
+      );
+    });
+
+    receiverList.forEach((receiver) => {
+      this.selectableGroup.add(
+        new Receiver(
+          receiver.id,
+          new THREE.Vector3(
+            receiver.position_x,
+            receiver.position_y,
+            receiver.position_z
+          ),
+          new THREE.Vector3(
+            receiver.normal_x,
+            receiver.normal_y,
+            receiver.normal_z
+          ),
+          receiver.rotation_y,
+          receiver.curvature_e,
+          receiver.curvature_u,
+          receiver.plane_e,
+          receiver.plane_u,
+          receiver.resolution_e,
+          receiver.resolution_u
+        )
+      );
+    });
+
+    lightsourceList.forEach((lightsource) => {
+      this.selectableGroup.add(new Lightsource(lightsource.id));
+    });
+
+    // only for debugging purposes --> will be removed
+    console.log(this.scene);
   }
 }
