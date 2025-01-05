@@ -8,6 +8,7 @@ import { SaveAndLoadHandler } from "saveAndLoadHandler";
 import { Heliostat, Receiver, Lightsource, Terrain } from "objects";
 import { Object3D } from "three";
 import { Navbar } from "navbar";
+import { Overview } from "overview";
 
 let editorInstance = null;
 
@@ -26,6 +27,7 @@ export class Editor {
     this.undoRedoHandler = new UndoRedoHandler();
     this.saveAndLoadHandler = new SaveAndLoadHandler(projectId);
     this.navbar = new Navbar();
+    this.overview = new Overview(this);
 
     this.#setUpScene();
 
@@ -81,6 +83,7 @@ export class Editor {
    * @param {Boolean} mode True to enable, false to disable
    */
   setShadows(mode) {
+    // TODO: Add saving via api
     this.renderer.shadowMap.enabled = mode;
   }
 
@@ -89,7 +92,12 @@ export class Editor {
    * @param {Boolean} mode True to enable, false to disable
    */
   setFog(mode) {
+    // TODO: Add saving via api
     this.scene.fog = mode ? new THREE.Fog(0xdde0e0, 100, 2200) : null;
+  }
+
+  getObjects() {
+    return this.selectableGroup.children;
   }
 
   #setUpScene() {

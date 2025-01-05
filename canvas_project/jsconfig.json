@@ -15,7 +15,8 @@
       "commands": ["static/js/commands.mjs"],
       "undoRedoHandler": ["static/js/undoRedoHandler.mjs"],
       "objects": ["static/js/objects.mjs"],
-      "saveAndLoadHandler": ["static/js/saveAndLoadHandler.mjs"]
+      "saveAndLoadHandler": ["static/js/saveAndLoadHandler.mjs"],
+      "overview": ["static/js/overview.mjs"]
     }
   }
 }
