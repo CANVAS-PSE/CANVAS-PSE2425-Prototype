@@ -7,15 +7,19 @@ import os
 from django.conf import settings
 
 
-def editor(request, project_id):
+def editor(request, project_name):
     # Return 404 not found if user has no project with this id
-    get_object_or_404(Project, id=project_id, owner=request.user)
+    project = get_object_or_404(Project, name=project_name, owner=request.user)
 
-    return render(request, "editor/editor.html", context={"project_id": project_id})
+    return render(
+        request,
+        "editor/editor.html",
+        context={"project_id": project.pk, "project_name": project.name},
+    )
 
 
-def download(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
+def download(request, project_name):
+    project = get_object_or_404(Project, name=project_name)
 
     path = os.path.join(settings.BASE_DIR, "static/img/skybox/nx.png")
     file = open(path, "rb")
