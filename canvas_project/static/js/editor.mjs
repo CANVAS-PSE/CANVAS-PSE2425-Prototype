@@ -62,6 +62,7 @@ export class Editor {
   }
 
   render() {
+    this.selectionBox.update();
     this.renderer.clear();
     this.renderer.render(this.scene, this.camera);
     this.compass.render(this.renderer);
