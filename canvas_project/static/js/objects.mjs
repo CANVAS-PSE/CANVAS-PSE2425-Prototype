@@ -66,18 +66,15 @@ export class Receiver extends Object3D {
     resolutionU
   ) {
     super();
-    this.loader = new GLTFLoader();
-    this.mesh;
-    this.loader.load("/static/models/tower.glb", (gltf) => {
-      this.mesh = gltf.scene;
-      this.add(this.mesh);
-      this.mesh.traverse((child) => {
-        if (child.type == "Mesh") {
-          child.castShadow = true;
-        }
-      });
-    });
-    this.position.copy(position);
+    // place the 3D object
+    this.base = new ReceiverBase();
+    this.base.position.copy(new Vector3(position.x, 0, position.z));
+    this.add(this.base);
+
+    this.top = new ReceiverTop();
+    this.top.position.copy(position);
+    this.add(this.top);
+
     this.rotateY(rotationY);
     this.apiID = apiID;
     this.normalVector = normalVector;
@@ -87,6 +84,47 @@ export class Receiver extends Object3D {
     this.planeU = planeU;
     this.resolutionE = resolutionE;
     this.resolutionU = resolutionU;
+  }
+
+  /**
+   * Updates the position of the receiver manually to ensure that it's standing on the ground
+   * @param {Vector3} newPosition Is the new position for the receiver
+   */
+  updatePosition(newPosition) {
+    this.top.position.copy(newPosition);
+    this.base.position.copy(new Vector3(newPosition.x, 0, newPosition.z));
+  }
+}
+
+export class ReceiverBase extends Object3D {
+  constructor() {
+    super();
+    this.loader = new GLTFLoader();
+    this.loader.load("/static/models/towerBase.glb", (gltf) => {
+      this.base = gltf.scene;
+      this.add(this.base);
+      this.base.traverse((child) => {
+        if (child.type == "Mesh") {
+          child.castShadow = true;
+        }
+      });
+    });
+  }
+}
+
+export class ReceiverTop extends Object3D {
+  constructor() {
+    super();
+    this.loader = new GLTFLoader();
+    this.loader.load("/static/models/towerTop.glb", (gltf) => {
+      this.top = gltf.scene;
+      this.add(this.top);
+      this.top.traverse((child) => {
+        if (child.type == "Mesh") {
+          child.castShadow = true;
+        }
+      });
+    });
   }
 }
 
