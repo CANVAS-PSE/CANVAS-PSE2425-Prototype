@@ -15,8 +15,13 @@ def editor(request, project_id):
 
 
 def download(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
     path = os.path.join(settings.BASE_DIR, "static/img/skybox/nx.png")
-    response = FileResponse(open(path, "rb"))
+    file = open(path, "rb")
+    response = FileResponse(file)
     response["Content-Type"] = "application/octet-stream"
-    response["Content-Disposition"] = f'attachment; filename="placeholder"'
+    response["Content-Disposition"] = (
+        f'attachment; filename="{project.name}.{file.name.split('.')[1]}"'
+    )
     return response
