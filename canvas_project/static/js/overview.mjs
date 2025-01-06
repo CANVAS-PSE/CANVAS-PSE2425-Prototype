@@ -10,7 +10,7 @@ export class Overview {
     this.lightsourceList = document.getElementById("lightsourceList");
 
     this.overviewButton.addEventListener("click", () => {
-      this.render();
+      this.#render();
     });
 
     document
@@ -24,6 +24,7 @@ export class Overview {
           }
 
           this.selectedItem = target;
+          // TODO: Set the selected object accordingly
 
           target.classList.toggle("bg-body-secondary");
           target.classList.toggle("bg-primary-subtle");
@@ -31,16 +32,16 @@ export class Overview {
       });
   }
 
-  render() {
+  #render() {
     // remove all children
     this.heliostatList.innerHTML = "";
     this.receiverList.innerHTML = "";
     this.lightsourceList.innerHTML = "";
 
-    const objectInScene = this.editor.getObjects();
+    const objectsInScene = this.editor.getObjects();
 
     // render the objects
-    objectInScene.forEach((element) => {
+    objectsInScene.forEach((element) => {
       if (element instanceof Heliostat) {
         const heliostatEntry = document.createElement("div");
         heliostatEntry.role = "button";
@@ -91,6 +92,8 @@ export class Overview {
 
         this.lightsourceList.appendChild(lightsourceEntry);
       }
+
+      // TODO: If element is selectedElem in Picker --> colour it
     });
   }
 }
