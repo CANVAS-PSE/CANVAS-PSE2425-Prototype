@@ -19,7 +19,7 @@ We heavily recommend to install `CANVAS` package in a dedicated `Python3.8+` vir
  ```
 
 ## How to use CANVAS
-We plan to provide an official *ReadTheDocs* documentation including exemplary usage scripts..
+We plan to provide an official *ReadTheDocs* documentation including exemplary usage scripts!
 
 
 ## How to contribute
