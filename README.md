@@ -21,6 +21,7 @@ We heavily recommend to install `CANVAS` package in a dedicated `Python3.8+` vir
 ## How to use CANVAS
 We plan to provide an official *ReadTheDocs* documentation including exemplary usage scripts.
 
+
 ## How to contribute
 Check out our [contribution guidelines](CONTRIBUTING.md) if you are interested in contributing to the `CANVAS` project :fire:.
 Please also carefully check our [code of conduct](CODE_OF_CONDUCT.md) :blue_heart:.
