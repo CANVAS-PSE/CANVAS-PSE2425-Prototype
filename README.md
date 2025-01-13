@@ -2,6 +2,8 @@
    <img src="./logos/logo_canvas.jpg" height="300px">
 </div>
 
+
+
 # CANVAS - 3D editor for the AI-enhanced differentiable Ray Tracer ARTIST
 
 [![](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -18,6 +20,7 @@ We heavily recommend to install `CANVAS` package in a dedicated `Python3.8+` vir
 
 ## How to use CANVAS
 We plan to provide an official *ReadTheDocs* documentation including exemplary usage scripts..
+
 
 ## How to contribute
 Check out our [contribution guidelines](CONTRIBUTING.md) if you are interested in contributing to the `CANVAS` project :fire:.
